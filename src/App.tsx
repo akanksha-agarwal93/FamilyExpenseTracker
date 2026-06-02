@@ -2,6 +2,8 @@ import './App.css'
 import { ExpenseForm } from './components/ExpenseForm';
 import Home from './components/Home';
 import {createBrowserRouter, RouterProvider} from 'react-router-dom';
+import { ExpenseProvider } from './cotext/ExpenseContext';
+import Expenses from './components/Expenses';
 
 
 function App() {
@@ -17,12 +19,15 @@ const router = createBrowserRouter([
   },
   {
     path: '/expenses',
-    element: <div>Expenses List</div>
-  }
+    element: <Expenses/>
+  },
+  
 ])
   return (
     <>
-      <RouterProvider router={router}/>
+      <ExpenseProvider>
+        <RouterProvider router={router}/>
+      </ExpenseProvider>
     </>
   )
 }
