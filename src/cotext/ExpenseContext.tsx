@@ -4,6 +4,8 @@ import type { Expense } from "../types/Expense";
 export interface ExpenseContextType {
     expenses: Expense[];
     addExpense: (expense: Expense) => void;
+    editExpense: (updatedExpense: Expense) => void;
+    deleteExpense?: (id: string) => void;
 }
 
 export const ExpenseContext = createContext<ExpenseContextType | undefined>(undefined);
@@ -14,38 +16,46 @@ interface ExpenseProviderProps {
 
 export const ExpenseProvider = ({ children }: ExpenseProviderProps) => { 
     const [expenses, setExpenses] = useState<Expense[]>([]);
+    const [initialized, setInitialized] = useState(false);
 
-  // Load from localStorage
   useEffect(() => {
-    const savedExpenses =
-      localStorage.getItem("expenses");
-
-    if (savedExpenses) {
-      setExpenses(JSON.parse(savedExpenses));
-    }
+    try {
+          const saved = localStorage.getItem("expenses");
+          setInitialized(true);
+          if (saved) setExpenses(JSON.parse(saved));
+        } catch (error) {
+          console.error("Failed to load expenses from localStorage:", error);
+          setInitialized(true); // Even if loading fails, we consider initialization complete
+        }
   }, []);
 
-  // Save to localStorage
   useEffect(() => {
-    localStorage.setItem(
-      "expenses",
-      JSON.stringify(expenses)
-    );
-  }, [expenses]);
+    if (initialized) localStorage.setItem("expenses", JSON.stringify(expenses));
+  }, [expenses, initialized]);
 
   const addExpense = (expense: Expense) => {
     console.log("Adding expense:", expense);
     console.log("Current expenses before adding:", expenses);
     setExpenses((prev) => [...prev, expense]);
     console.log("Expense added. Current expenses after adding:", [...expenses, expense]);
-    }
+  }
+  
+  const editExpense = (updatedExpense: Expense) => {
+    const expenseId = updatedExpense.id;
+    setExpenses((prev) =>
+      prev.map((expense) => (expense.id === expenseId ? updatedExpense : expense))
+    );
+  }
+
+  const deleteExpense = (id: string) => {
+    setExpenses((prev) => prev.filter((expense) => expense.id !== id));
+  }
 
     return (
-        <ExpenseContext.Provider value={{ expenses, addExpense }}>
+        <ExpenseContext.Provider value={{ expenses, addExpense, editExpense, deleteExpense }}>
             {children}
         </ExpenseContext.Provider>
     );
-    
 }
 
 export const useExpenses = () => {
@@ -59,33 +69,3 @@ export const useExpenses = () => {
 
   return context;
 };
-
-// export const useExpenseContext = () => {
-//     const expenses = useContext(ExpenseContext);
-
-//     if (!expenses) {
-//         throw new Error("ExpenseContext is not provided");
-//     }   
-//     return expenses;
-// }
-
-// export const useAddExpenseContext = (expense: Expense) => {
-//     console.log("useAddExpenseContext called with expense:", expense);
-//     const expenses = useExpenseContext();
-
-//     console.log("Add expense function not implemented");
-//     console.log("Expense to add:", expense);
-
-//     expenses.push(expense);
-// }
-
-// export const ExpenseContext = createContext<{
-//     expenses: Expense[];
-//     addExpense: (expense: Expense) => void;
-// }>({
-//     expenses: [],
-//     addExpense: (expense) => {
-//         console.log("Add expense function not implemented");
-//         console.log("Expense to add:", expense);
-//     }
-// });

@@ -1,9 +1,10 @@
 import './App.css'
-import { ExpenseForm } from './components/ExpenseForm';
+import { AddExpense } from './components/AddExpense';
 import Home from './components/Home';
 import {createBrowserRouter, RouterProvider} from 'react-router-dom';
 import { ExpenseProvider } from './cotext/ExpenseContext';
 import Expenses from './components/Expenses';
+import { EditExpense } from './components/EditExpense';
 
 
 function App() {
@@ -15,11 +16,15 @@ const router = createBrowserRouter([
   },
   {
    path: '/add-expense',
-   element: <ExpenseForm/> 
+   element: <AddExpense/> 
   },
   {
     path: '/expenses',
     element: <Expenses/>
+  },
+  {
+    path: '/edit-expense/:id',
+    element: <EditExpense />
   },
   
 ])

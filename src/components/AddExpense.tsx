@@ -3,7 +3,7 @@ import type { Expense } from "../types/Expense";
 import { useState } from "react";
 import { useExpenses } from "../cotext/ExpenseContext";
 
-export function ExpenseForm() {
+export function AddExpense() {
     const navigate = useNavigate();
     const [expenseName, setExpenseName] = useState("");
     const [expenseCategory, setExpenseCategory] = useState("");
@@ -16,7 +16,7 @@ export function ExpenseForm() {
             name: expenseName,
             category: expenseCategory,
             amount: parseFloat(expenseAmount) || 0,
-            date: new Date()
+            date: new Date().toISOString()
         };
         console.log("Submitting new expense:", newExpense);
         addExpense(newExpense);
