@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom"
-import { useExpenses } from "../cotext/ExpenseContext"
+import { useExpenses } from "../context/ExpenseContext"
 import { CiEdit } from "react-icons/ci"
 import { MdOutlineDelete } from "react-icons/md"
 
