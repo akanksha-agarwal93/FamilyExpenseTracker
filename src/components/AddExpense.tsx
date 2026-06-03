@@ -20,7 +20,7 @@ export function AddExpense() {
 		}
 		console.log("Submitting new expense:", newExpense)
 		addExpense(newExpense)
-		navigate("/Expenses")
+		navigate("/expenses")
 	}
 	return (
 		<>
