@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom"
 import type { Expense } from "../types/Expense"
-import { useExpenses } from "../context/ExpenseContext"
+import { useExpenses } from "../context/ExpenseContextState"
 import { ExpenseForm } from "../shared/ExpenseForm"
 
 export function EditExpense() {

@@ -104,7 +104,7 @@ export function ExpenseForm({
 								id='expense-amount'
 								min='0'
 								step='0.01'
-								placeholder='$0.00'
+								placeholder='€0.00'
 								className='h-[43px] w-full rounded-md border border-[#53534f] bg-[#2e2f2d] px-4 text-lg font-semibold text-[#f2efe8] outline-none transition placeholder:text-[#7e7d79] focus:border-[#85827b] focus:ring-2 focus:ring-[#85827b]/20'
 								value={expenseAmount}
 								onChange={(e) => setExpenseAmount(e.target.value)}
