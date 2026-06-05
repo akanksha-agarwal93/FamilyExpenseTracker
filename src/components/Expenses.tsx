@@ -92,7 +92,7 @@ export default function Expenses() {
 	)
 
 	return (
-		<div className='min-h-svh bg-[#1f1f1d] px-5 py-5 text-left text-[#f1eee7] sm:px-9'>
+		<div className='min-h-[calc(100svh-65px)] px-5 py-5 text-left text-[#f1eee7] sm:px-9'>
 			<div className='mx-auto w-full max-w-[586px]'>
 				<header className='mb-7 flex items-center justify-between gap-4'>
 					<h1 className='m-0 text-2xl font-bold tracking-normal text-[#f3f1eb]'>

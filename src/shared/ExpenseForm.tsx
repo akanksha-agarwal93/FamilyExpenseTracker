@@ -37,7 +37,7 @@ export function ExpenseForm({
 	}
 
 	return (
-		<div className='flex min-h-svh w-full items-start justify-center bg-[#1f1f1d] px-4 py-6 text-left sm:py-10'>
+		<div className='flex min-h-[calc(100svh-65px)] w-full items-start justify-center px-4 py-6 text-left sm:py-10'>
 			<form
 				onSubmit={(event) => {
 					event.preventDefault()
