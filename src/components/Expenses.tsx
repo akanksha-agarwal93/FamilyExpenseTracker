@@ -1,56 +1,13 @@
 import { useMemo } from "react"
 import { useNavigate } from "react-router-dom"
-import {
-	FiCoffee,
-	FiEdit2,
-	FiMonitor,
-	FiPlus,
-	FiShoppingCart,
-	FiTrash2,
-	FiTruck,
-} from "react-icons/fi"
-import { MdOutlineRestaurant } from "react-icons/md"
+import { FiEdit2, FiPlus, FiTrash2 } from "react-icons/fi"
 import { useExpenses } from "../context/ExpenseContextState"
 import type { Expense } from "../types/Expense"
+import { getExpenseIcon } from "../utils/ExpenseCategoryIcon"
+import { currencyFormatter, dateFormatter, getDateGroupLabel } from "../utils/Formatters"
 
-const currencyFormatter = new Intl.NumberFormat("en-US", {
-	currency: "EUR",
-	style: "currency",
-})
-
-const dateFormatter = new Intl.DateTimeFormat("en-US", {
-	day: "numeric",
-	month: "short",
-})
-
-function getExpenseDate(expense: Expense) {
+const getExpenseDate = (expense: Expense) => {
 	return new Date(expense.date)
-}
-
-function isSameDay(firstDate: Date, secondDate: Date) {
-	return firstDate.toDateString() === secondDate.toDateString()
-}
-
-function getDateGroupLabel(date: Date) {
-	const today = new Date()
-	const yesterday = new Date()
-	yesterday.setDate(today.getDate() - 1)
-
-	if (isSameDay(date, today)) return "TODAY"
-	if (isSameDay(date, yesterday)) return "YESTERDAY"
-
-	return dateFormatter.format(date).toUpperCase()
-}
-
-function getExpenseIcon(category: string) {
-	const normalizedCategory = category.toLowerCase()
-
-	if (normalizedCategory.includes("transport")) return <FiTruck />
-	if (normalizedCategory.includes("dining")) return <MdOutlineRestaurant />
-	if (normalizedCategory.includes("entertainment")) return <FiMonitor />
-	if (normalizedCategory.includes("coffee")) return <FiCoffee />
-
-	return <FiShoppingCart />
 }
 
 export default function Expenses() {
@@ -76,7 +33,9 @@ export default function Expenses() {
 	const thisMonthAmount = expenses
 		.filter((expense) => {
 			const date = getExpenseDate(expense)
-			return date.getMonth() === currentMonth && date.getFullYear() === currentYear
+			return (
+				date.getMonth() === currentMonth && date.getFullYear() === currentYear
+			)
 		})
 		.reduce((total, expense) => total + expense.amount, 0)
 
@@ -131,7 +90,9 @@ export default function Expenses() {
 				<section className='overflow-hidden rounded-xl border border-[#4a4a46] bg-[#2f302e]'>
 					{sortedExpenses.length === 0 ? (
 						<div className='px-6 py-12 text-center'>
-							<p className='text-lg font-bold text-[#f3f1eb]'>No expenses yet</p>
+							<p className='text-lg font-bold text-[#f3f1eb]'>
+								No expenses yet
+							</p>
 							<p className='mt-1 text-base font-semibold text-[#aaa69e]'>
 								Add your first expense to start tracking.
 							</p>
@@ -157,7 +118,7 @@ export default function Expenses() {
 												{expense.name || "Untitled expense"}
 											</h2>
 											<p className='mt-0.5 truncate text-base font-semibold leading-tight text-[#aaa69e]'>
-												{expense.category} ·{" "}
+												{expense.category} -{" "}
 												{dateFormatter.format(getExpenseDate(expense))}
 											</p>
 										</div>
@@ -190,7 +151,7 @@ export default function Expenses() {
 				</section>
 
 				<footer className='mt-8 text-center text-base font-semibold text-[#aaa69e]'>
-					{expenses.length} {expenses.length === 1 ? "expense" : "expenses"} ·{" "}
+					{expenses.length} {expenses.length === 1 ? "expense" : "expenses"} -{" "}
 					{currencyFormatter.format(totalAmount)} total
 				</footer>
 			</div>

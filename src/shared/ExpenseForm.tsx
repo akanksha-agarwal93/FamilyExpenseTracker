@@ -1,6 +1,10 @@
 import { useNavigate } from "react-router-dom"
 import type { Expense } from "../types/Expense"
 import { useState } from "react"
+import {
+	expenseCategories,
+	type ExpenseCategory,
+} from "../types/ExpenseCategory"
 
 interface ExpenseFormProps {
 	initialExpense?: Expense
@@ -15,7 +19,7 @@ export function ExpenseForm({
 	const expenseId = initialExpense?.id || crypto.randomUUID()
 	const [expenseName, setExpenseName] = useState(initialExpense?.name || "")
 	const [expenseCategory, setExpenseCategory] = useState(
-		initialExpense?.category || "",
+		initialExpense?.category || expenseCategories[0].value,
 	)
 	const [expenseDate, setExpenseDate] = useState(
 		initialExpense?.date ? initialExpense.date.split("T")[0] : "",
@@ -28,7 +32,7 @@ export function ExpenseForm({
 		const newExpense: Expense = {
 			id: expenseId,
 			name: expenseName,
-			category: expenseCategory,
+			category: expenseCategory as ExpenseCategory,
 			amount: parseFloat(expenseAmount) || 0,
 			date: new Date(expenseDate).toISOString(),
 		}
@@ -80,15 +84,21 @@ export function ExpenseForm({
 						>
 							Category
 						</label>
-						<input
-							type='text'
+						<select
 							id='expense-category'
-							placeholder='e.g Groceries, Transport'
-							className='h-[43px] w-full rounded-md border border-[#53534f] bg-[#2e2f2d] px-4 text-lg font-semibold text-[#f2efe8] outline-none transition placeholder:text-[#7e7d79] focus:border-[#85827b] focus:ring-2 focus:ring-[#85827b]/20'
+							className='h-[43px] w-full rounded-md border border-[#53534f] bg-[#2e2f2d] px-4 text-lg font-semibold text-[#f2efe8] outline-none transition [color-scheme:dark] focus:border-[#85827b] focus:ring-2 focus:ring-[#85827b]/20'
 							value={expenseCategory}
-							onChange={(e) => setExpenseCategory(e.target.value)}
+							onChange={(e) =>
+								setExpenseCategory(e.target.value as ExpenseCategory)
+							}
 							required
-						/>
+						>
+							{expenseCategories.map((category) => (
+								<option key={category.value} value={category.value}>
+									{category.label}
+								</option>
+							))}
+						</select>
 					</div>
 
 					<div className='grid gap-4 sm:grid-cols-2'>
@@ -104,7 +114,7 @@ export function ExpenseForm({
 								id='expense-amount'
 								min='0'
 								step='0.01'
-								placeholder='€0.00'
+								placeholder='EUR 0.00'
 								className='h-[43px] w-full rounded-md border border-[#53534f] bg-[#2e2f2d] px-4 text-lg font-semibold text-[#f2efe8] outline-none transition placeholder:text-[#7e7d79] focus:border-[#85827b] focus:ring-2 focus:ring-[#85827b]/20'
 								value={expenseAmount}
 								onChange={(e) => setExpenseAmount(e.target.value)}
