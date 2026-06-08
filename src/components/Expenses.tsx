@@ -1,10 +1,18 @@
-import { useMemo } from "react"
+import { useMemo, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { FiEdit2, FiPlus, FiTrash2 } from "react-icons/fi"
 import { useExpenses } from "../context/ExpenseContextState"
 import type { Expense } from "../types/Expense"
+import {
+	CategoryFilterDropdown,
+	type CategoryFilter,
+} from "../shared/CategoryFilterDropdown"
 import { getExpenseIcon } from "../utils/ExpenseCategoryIcon"
-import { currencyFormatter, dateFormatter, getDateGroupLabel } from "../utils/Formatters"
+import {
+	currencyFormatter,
+	dateFormatter,
+	getDateGroupLabel,
+} from "../utils/Formatters"
 
 const getExpenseDate = (expense: Expense) => {
 	return new Date(expense.date)
@@ -13,24 +21,32 @@ const getExpenseDate = (expense: Expense) => {
 export default function Expenses() {
 	const { expenses, deleteExpense } = useExpenses()
 	const navigate = useNavigate()
+	const [selectedCategory, setSelectedCategory] =
+		useState<CategoryFilter>("All")
+
+	const filteredExpenses = useMemo(() => {
+		if (selectedCategory === "All") return expenses
+
+		return expenses.filter((expense) => expense.category === selectedCategory)
+	}, [expenses, selectedCategory])
 
 	const sortedExpenses = useMemo(
 		() =>
-			[...expenses].sort(
+			[...filteredExpenses].sort(
 				(firstExpense, secondExpense) =>
 					getExpenseDate(secondExpense).getTime() -
 					getExpenseDate(firstExpense).getTime(),
 			),
-		[expenses],
+		[filteredExpenses],
 	)
 
-	const totalAmount = expenses.reduce(
+	const totalAmount = filteredExpenses.reduce(
 		(total, expense) => total + expense.amount,
 		0,
 	)
 	const currentMonth = new Date().getMonth()
 	const currentYear = new Date().getFullYear()
-	const thisMonthAmount = expenses
+	const thisMonthAmount = filteredExpenses
 		.filter((expense) => {
 			const date = getExpenseDate(expense)
 			return (
@@ -66,6 +82,11 @@ export default function Expenses() {
 					</button>
 				</header>
 
+				<CategoryFilterDropdown
+					value={selectedCategory}
+					onChange={setSelectedCategory}
+				/>
+
 				<section className='mb-5 grid gap-3 sm:grid-cols-3'>
 					<div className='rounded-lg bg-[#282925] px-4 py-4'>
 						<p className='text-sm font-semibold text-[#aaa69e]'>Total</p>
@@ -82,19 +103,28 @@ export default function Expenses() {
 					<div className='rounded-lg bg-[#282925] px-4 py-4'>
 						<p className='text-sm font-semibold text-[#aaa69e]'>Entries</p>
 						<p className='mt-1 text-2xl font-bold leading-tight text-[#f3f1eb]'>
-							{expenses.length}
+							{filteredExpenses.length}
 						</p>
 					</div>
 				</section>
 
 				<section className='overflow-hidden rounded-xl border border-[#4a4a46] bg-[#2f302e]'>
-					{sortedExpenses.length === 0 ? (
+					{expenses.length === 0 ? (
 						<div className='px-6 py-12 text-center'>
 							<p className='text-lg font-bold text-[#f3f1eb]'>
 								No expenses yet
 							</p>
 							<p className='mt-1 text-base font-semibold text-[#aaa69e]'>
 								Add your first expense to start tracking.
+							</p>
+						</div>
+					) : sortedExpenses.length === 0 ? (
+						<div className='px-6 py-12 text-center'>
+							<p className='text-lg font-bold text-[#f3f1eb]'>
+								No expenses found
+							</p>
+							<p className='mt-1 text-base font-semibold text-[#aaa69e]'>
+								Try another category.
 							</p>
 						</div>
 					) : (
@@ -151,7 +181,8 @@ export default function Expenses() {
 				</section>
 
 				<footer className='mt-8 text-center text-base font-semibold text-[#aaa69e]'>
-					{expenses.length} {expenses.length === 1 ? "expense" : "expenses"} -{" "}
+					{filteredExpenses.length}{" "}
+					{filteredExpenses.length === 1 ? "expense" : "expenses"} -{" "}
 					{currencyFormatter.format(totalAmount)} total
 				</footer>
 			</div>
