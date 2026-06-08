@@ -5,6 +5,7 @@ import {
 	expenseCategories,
 	type ExpenseCategory,
 } from "../types/ExpenseCategory"
+import { getDateInputValue } from "../utils/Formatters"
 
 interface ExpenseFormProps {
 	initialExpense?: Expense
@@ -27,8 +28,11 @@ export function ExpenseForm({
 	const [expenseAmount, setExpenseAmount] = useState(
 		initialExpense?.amount.toString() || "",
 	)
+	const todayDate = getDateInputValue()
 
 	const handleFormSubmit = () => {
+		if (expenseDate > todayDate) return
+
 		const newExpense: Expense = {
 			id: expenseId,
 			name: expenseName,
@@ -134,6 +138,7 @@ export function ExpenseForm({
 								id='expense-date'
 								className='h-[43px] w-full rounded-md border border-[#53534f] bg-[#2e2f2d] px-4 text-lg font-bold text-[#f2efe8] outline-none transition [color-scheme:dark] placeholder:text-[#7e7d79] focus:border-[#85827b] focus:ring-2 focus:ring-[#85827b]/20'
 								value={expenseDate}
+								max={todayDate}
 								onChange={(e) => setExpenseDate(e.target.value)}
 								required
 							/>
