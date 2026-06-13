@@ -13,7 +13,7 @@ export function AppLayout() {
 	return (
 		<div className='min-h-svh bg-[#1f1f1d] text-[#f3f1eb]'>
 			<nav className='sticky top-0 z-20 border-b border-[#3d3e39] bg-[#1f1f1d]/95 px-5 py-3 backdrop-blur sm:px-9'>
-				<div className='mx-auto flex w-full max-w-[720px] flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
+				<div className='mx-auto flex w-full max-w-[1080px] flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
 					<NavLink
 						to='/'
 						className='inline-flex items-center gap-2 text-lg font-bold text-[#f3f1eb]'

@@ -1,7 +1,7 @@
 import "./App.css"
 import { AddExpense } from "./components/AddExpense"
 import { AppLayout } from "./components/AppLayout"
-import Home from "./components/Home"
+import Dashboard from "./components/Dashboard"
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import { ExpenseProvider } from "./context/ExpenseContext"
 import Expenses from "./components/Expenses"
@@ -16,7 +16,7 @@ function App() {
 			children: [
 				{
 					index: true,
-					element: <Home />,
+					element: <Dashboard />,
 				},
 				{
 					path: "add-expense",
