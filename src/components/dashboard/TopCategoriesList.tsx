@@ -1,20 +1,16 @@
-import type { ExpenseCategory } from "../../types/ExpenseCategory"
+import type { DashboardCategoryItem } from "../../types/Dashboard"
 import { currencyFormatter } from "../../utils/Formatters"
 import { getExpenseIcon } from "../../utils/ExpenseCategoryIcon"
 
-interface CategoryListItem {
-	color: string
-	label: string
-	percentage: number
-	total: number
-	value: ExpenseCategory
-}
-
 interface TopCategoriesListProps {
-	categories: CategoryListItem[]
+	categories: DashboardCategoryItem[]
+	periodLabel: string
 }
 
-export function TopCategoriesList({ categories }: TopCategoriesListProps) {
+export function TopCategoriesList({
+	categories,
+	periodLabel,
+}: TopCategoriesListProps) {
 	const maxTotal = Math.max(...categories.map((category) => category.total), 1)
 
 	return (
@@ -28,7 +24,7 @@ export function TopCategoriesList({ categories }: TopCategoriesListProps) {
 					<div className='rounded-lg border border-[#4b4c47] bg-[#292a27] px-4 py-6 text-center'>
 						<p className='text-sm font-bold text-[#f3f1eb]'>No spending yet</p>
 						<p className='mt-1 text-xs font-semibold text-[#aaa69e]'>
-							Add expenses this week to see category trends.
+							Add expenses {periodLabel} to see category trends.
 						</p>
 					</div>
 				) : (

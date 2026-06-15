@@ -1,9 +1,18 @@
 import { FiPlus } from "react-icons/fi"
 import { useNavigate } from "react-router-dom"
+import type { DashboardPeriod } from "../../types/Dashboard"
 
 const periods = ["Weekly", "Monthly", "Yearly"] as const
 
-export const DashboardHeader = () => {
+interface DashboardHeaderProps {
+	selectedPeriod: DashboardPeriod
+	onPeriodChange: (period: DashboardPeriod) => void
+}
+
+export const DashboardHeader = ({
+	onPeriodChange,
+	selectedPeriod,
+}: DashboardHeaderProps) => {
 	const navigate = useNavigate()
 
 	return (
@@ -31,12 +40,17 @@ export const DashboardHeader = () => {
 						<button
 							key={period}
 							type='button'
-							disabled={period !== "Weekly"}
+							disabled={period === "Yearly"}
+							onClick={() => {
+								if (period !== "Yearly") onPeriodChange(period)
+							}}
 							className={[
 								"h-9 rounded-md px-4 text-sm font-bold transition",
-								period === "Weekly"
+								period === selectedPeriod
 									? "bg-[#30312e] text-[#f3f1eb]"
-									: "cursor-not-allowed text-[#c8c4bc] opacity-70",
+									: period === "Yearly"
+										? "cursor-not-allowed text-[#c8c4bc] opacity-50"
+										: "text-[#c8c4bc] hover:bg-[#2b2c29] hover:text-[#f3f1eb]",
 							].join(" ")}
 						>
 							{period}

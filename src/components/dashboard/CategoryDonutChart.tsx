@@ -1,16 +1,14 @@
-interface CategoryChartItem {
-	color: string
-	label: string
-	percentage: number
-	total: number
-	value: string
-}
+import type { DashboardCategoryItem } from "../../types/Dashboard"
 
 interface CategoryDonutChartProps {
-	categories: CategoryChartItem[]
+	categories: DashboardCategoryItem[]
+	periodLabel: string
 }
 
-export const CategoryDonutChart = ({ categories }: CategoryDonutChartProps) => {
+export const CategoryDonutChart = ({
+	categories,
+	periodLabel,
+}: CategoryDonutChartProps) => {
 	let offset = 25
 
 	return (
@@ -45,7 +43,7 @@ export const CategoryDonutChart = ({ categories }: CategoryDonutChartProps) => {
 					viewBox='0 0 42 42'
 					className='h-full w-full -rotate-90'
 					role='img'
-					aria-label='Weekly spending by category'
+					aria-label={`${periodLabel} spending by category`}
 				>
 					<circle
 						cx='21'
@@ -67,9 +65,9 @@ export const CategoryDonutChart = ({ categories }: CategoryDonutChartProps) => {
 						/>
 					) : (
 						categories.map((category) => {
-							const dashArray = `${category.percentage} ${100 - category.percentage}`
+							const dashArray = `${category.chartPercentage} ${100 - category.chartPercentage}`
 							const dashOffset = offset
-							offset -= category.percentage
+							offset -= category.chartPercentage
 
 							return (
 								<circle
