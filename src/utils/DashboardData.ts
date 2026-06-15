@@ -48,14 +48,14 @@ export const getExpenseDate = (expense: Expense) => new Date(expense.date)
 
 const normalizeCategory = (category: string): ExpenseCategory => {
 	const normalizedCategory = category.trim().toLowerCase()
+	console.log("Normalized category:", normalizedCategory)
 	const matchingCategory = expenseCategories.find(
 		(expenseCategory) =>
 			expenseCategory.value.toLowerCase() === normalizedCategory,
 	)
 
 	if (matchingCategory) return matchingCategory.value
-	if (normalizedCategory === "rent") return "House rent"
-
+	
 	return "Other"
 }
 
@@ -81,7 +81,6 @@ export const getDashboardCategories = (
 				total > 0 ? (categoryTotal / total) * 100 : 0
 
 			return {
-				chartPercentage,
 				color: categoryColors[category.value],
 				label: category.label,
 				percentage: Math.round(chartPercentage),

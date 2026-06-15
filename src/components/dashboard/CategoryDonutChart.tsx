@@ -1,3 +1,10 @@
+import {
+	Pie,
+	PieChart,
+	ResponsiveContainer,
+	Sector,
+	type PieSectorShapeProps,
+} from "recharts"
 import type { DashboardCategoryItem } from "../../types/Dashboard"
 
 interface CategoryDonutChartProps {
@@ -5,11 +12,43 @@ interface CategoryDonutChartProps {
 	periodLabel: string
 }
 
+interface CategoryChartDatum {
+	color: string
+	label: string
+	total: number
+}
+
+const renderCategorySector = ({
+	cornerRadius,
+	cx,
+	cy,
+	endAngle,
+	innerRadius,
+	outerRadius,
+	payload,
+	startAngle,
+}: PieSectorShapeProps) => (
+	<Sector
+		cornerRadius={cornerRadius}
+		cx={cx}
+		cy={cy}
+		endAngle={endAngle}
+		fill={(payload as CategoryChartDatum).color}
+		innerRadius={innerRadius}
+		outerRadius={outerRadius}
+		startAngle={startAngle}
+		stroke='none'
+	/>
+)
+
 export const CategoryDonutChart = ({
 	categories,
 	periodLabel,
 }: CategoryDonutChartProps) => {
-	let offset = 25
+	const chartData: CategoryChartDatum[] =
+		categories.length > 0
+			? categories
+			: [{ label: "No spending", total: 1, color: "#555650" }]
 
 	return (
 		<section className='rounded-xl border border-[#575852] bg-[#30312e] px-5 py-5 text-left'>
@@ -38,53 +77,27 @@ export const CategoryDonutChart = ({
 				)}
 			</div>
 
-			<div className='relative mx-auto mt-6 flex h-[190px] w-[190px] items-center justify-center'>
-				<svg
-					viewBox='0 0 42 42'
-					className='h-full w-full -rotate-90'
-					role='img'
-					aria-label={`${periodLabel} spending by category`}
-				>
-					<circle
-						cx='21'
-						cy='21'
-						r='15.915'
-						fill='transparent'
-						stroke='#3f403c'
-						strokeWidth='7'
-					/>
-					{categories.length === 0 ? (
-						<circle
-							cx='21'
-							cy='21'
-							r='15.915'
-							fill='transparent'
-							stroke='#555650'
-							strokeWidth='7'
-							strokeDasharray='100 100'
+			<div
+				className='mx-auto mt-6 h-[190px] w-full max-w-[240px]'
+				role='img'
+				aria-label={`${periodLabel} spending by category`}
+			>
+				<ResponsiveContainer width='100%' height='100%'>
+					<PieChart>
+						<Pie
+							data={chartData}
+							dataKey='total'
+							nameKey='label'
+							cx='50%'
+							cy='50%'
+							innerRadius={48}
+							outerRadius={76}
+							stroke='none'
+							isAnimationActive={false}
+							shape={renderCategorySector}
 						/>
-					) : (
-						categories.map((category) => {
-							const dashArray = `${category.chartPercentage} ${100 - category.chartPercentage}`
-							const dashOffset = offset
-							offset -= category.chartPercentage
-
-							return (
-								<circle
-									key={category.value}
-									cx='21'
-									cy='21'
-									r='15.915'
-									fill='transparent'
-									stroke={category.color}
-									strokeWidth='7'
-									strokeDasharray={dashArray}
-									strokeDashoffset={dashOffset}
-								/>
-							)
-						})
-					)}
-				</svg>
+					</PieChart>
+				</ResponsiveContainer>
 			</div>
 		</section>
 	)

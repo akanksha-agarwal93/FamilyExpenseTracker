@@ -8,7 +8,6 @@ export interface DashboardChartItem {
 }
 
 export interface DashboardCategoryItem {
-	chartPercentage: number
 	color: string
 	label: string
 	percentage: number
