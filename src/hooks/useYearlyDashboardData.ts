@@ -22,11 +22,11 @@ const monthLabels = [
 	"Dec",
 ] as const
 
-export function useYearlyDashboardData() {
+export function useYearlyDashboardData(referenceDate: Date) {
 	const { expenses } = useExpenses()
 
 	return useMemo(() => {
-		const currentYear = new Date().getFullYear()
+		const currentYear = referenceDate.getFullYear()
 		const daysInYear =
 			(new Date(currentYear + 1, 0, 1).getTime() -
 				new Date(currentYear, 0, 1).getTime()) /
@@ -65,5 +65,5 @@ export function useYearlyDashboardData() {
 			yearlyBudget: YEARLY_BUDGET,
 			yearlyExpenses,
 		}
-	}, [expenses])
+	}, [expenses, referenceDate])
 }

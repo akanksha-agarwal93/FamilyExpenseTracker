@@ -7,13 +7,12 @@ import {
 
 const MONTHLY_BUDGET = 2000
 
-export function useMonthlyDashboardData() {
+export function useMonthlyDashboardData(referenceDate: Date) {
 	const { expenses } = useExpenses()
 
 	return useMemo(() => {
-		const today = new Date()
-		const currentMonth = today.getMonth()
-		const currentYear = today.getFullYear()
+		const currentMonth = referenceDate.getMonth()
+		const currentYear = referenceDate.getFullYear()
 		const daysInMonth = new Date(
 			currentYear,
 			currentMonth + 1,
@@ -71,5 +70,5 @@ export function useMonthlyDashboardData() {
 			topCategory: categories[0],
 			totalThisMonth,
 		}
-	}, [expenses])
+	}, [expenses, referenceDate])
 }

@@ -9,6 +9,10 @@ import { useWeeklyDashboardData } from "../hooks/useWeeklyDashboardData"
 import { useYearlyDashboardData } from "../hooks/useYearlyDashboardData"
 import type { DashboardPeriod } from "../types/Dashboard"
 import { getDashboardPeriodData } from "../utils/DashboardPeriodData"
+import {
+	getDashboardRangeLabel,
+	getShiftedDashboardDate,
+} from "../utils/DashboardData"
 import { currencyFormatter } from "../utils/Formatters"
 
 const formatWholeCurrency = (amount: number) =>
@@ -17,15 +21,24 @@ const formatWholeCurrency = (amount: number) =>
 export default function Dashboard() {
 	const [selectedPeriod, setSelectedPeriod] =
 		useState<DashboardPeriod>("Weekly")
-	const weeklyData = useWeeklyDashboardData()
-	const monthlyData = useMonthlyDashboardData()
-	const yearlyData = useYearlyDashboardData()
+	const [viewDate, setViewDate] = useState(() => new Date())
+	const weeklyData = useWeeklyDashboardData(viewDate)
+	const monthlyData = useMonthlyDashboardData(viewDate)
+	const yearlyData = useYearlyDashboardData(viewDate)
 	const dashboardData = getDashboardPeriodData({
 		monthlyData,
 		selectedPeriod,
+		viewDate,
 		weeklyData,
 		yearlyData,
 	})
+	const rangeLabel = getDashboardRangeLabel(viewDate, selectedPeriod)
+
+	const handlePeriodShift = (direction: -1 | 1) => {
+		setViewDate((currentDate) =>
+			getShiftedDashboardDate(currentDate, selectedPeriod, direction),
+		)
+	}
 
 	const budgetDetail =
 		dashboardData.budgetLeft >= 0
@@ -37,7 +50,10 @@ export default function Dashboard() {
 			<div className='mx-auto w-full max-w-[1080px]'>
 				<DashboardHeader
 					selectedPeriod={selectedPeriod}
+					rangeLabel={rangeLabel}
 					onPeriodChange={setSelectedPeriod}
+					onPreviousPeriod={() => handlePeriodShift(-1)}
+					onNextPeriod={() => handlePeriodShift(1)}
 				/>
 
 				<div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-4'>

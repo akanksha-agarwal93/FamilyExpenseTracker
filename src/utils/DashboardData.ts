@@ -1,4 +1,4 @@
-import type { DashboardCategoryItem } from "../types/Dashboard"
+import type { DashboardCategoryItem, DashboardPeriod } from "../types/Dashboard"
 import {
 	expenseCategories,
 	type ExpenseCategory,
@@ -20,6 +20,16 @@ const categoryColors: Record<ExpenseCategory, string> = {
 
 export const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] as const
 
+const monthYearFormatter = new Intl.DateTimeFormat("en-US", {
+	month: "long",
+	year: "numeric",
+})
+
+const rangeDateFormatter = new Intl.DateTimeFormat("en-US", {
+	day: "numeric",
+	month: "short",
+})
+
 export const getStartOfWeek = (date: Date) => {
 	const start = new Date(date)
 	const day = start.getDay()
@@ -36,6 +46,57 @@ export const getEndOfWeek = (startOfWeek: Date) => {
 	end.setDate(startOfWeek.getDate() + 7)
 
 	return end
+}
+
+export const getDashboardRangeLabel = (
+	date: Date,
+	period: DashboardPeriod,
+) => {
+	const today = new Date()
+
+	if (period === "Weekly") {
+		const startOfWeek = getStartOfWeek(date)
+		const endOfWeek = new Date(startOfWeek)
+		endOfWeek.setDate(startOfWeek.getDate() + 6)
+		const currentWeekStart = getStartOfWeek(today)
+
+		if (startOfWeek.getTime() === currentWeekStart.getTime()) {
+			return "This week"
+		}
+
+		return `${rangeDateFormatter.format(startOfWeek)} - ${rangeDateFormatter.format(endOfWeek)}`
+	}
+
+	if (period === "Monthly") {
+		const isCurrentMonth =
+			date.getMonth() === today.getMonth() &&
+			date.getFullYear() === today.getFullYear()
+
+		return isCurrentMonth ? "This month" : monthYearFormatter.format(date)
+	}
+
+	return date.getFullYear() === today.getFullYear()
+		? "This year"
+		: date.getFullYear().toString()
+}
+
+export const getShiftedDashboardDate = (
+	date: Date,
+	period: DashboardPeriod,
+	direction: -1 | 1,
+) => {
+	if (period === "Weekly") {
+		const nextDate = new Date(date)
+		nextDate.setDate(date.getDate() + direction * 7)
+
+		return nextDate
+	}
+
+	if (period === "Monthly") {
+		return new Date(date.getFullYear(), date.getMonth() + direction, 1)
+	}
+
+	return new Date(date.getFullYear() + direction, 0, 1)
 }
 
 export const getMondayBasedDayIndex = (date: Date) => {

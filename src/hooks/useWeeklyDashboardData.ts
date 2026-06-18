@@ -11,11 +11,11 @@ import {
 
 const WEEKLY_BUDGET = 500
 
-export function useWeeklyDashboardData() {
+export function useWeeklyDashboardData(referenceDate: Date) {
 	const { expenses } = useExpenses()
 
 	return useMemo(() => {
-		const startOfWeek = getStartOfWeek(new Date())
+		const startOfWeek = getStartOfWeek(referenceDate)
 		const endOfWeek = getEndOfWeek(startOfWeek)
 		const weeklyExpenses = expenses.filter((expense) => {
 			const expenseDate = getExpenseDate(expense)
@@ -56,5 +56,5 @@ export function useWeeklyDashboardData() {
 			weeklyBudget: WEEKLY_BUDGET,
 			weeklyExpenses,
 		}
-	}, [expenses])
+	}, [expenses, referenceDate])
 }

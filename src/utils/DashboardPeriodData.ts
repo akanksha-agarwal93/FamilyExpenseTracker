@@ -14,6 +14,7 @@ type YearlyDashboardData = ReturnType<typeof useYearlyDashboardData>
 interface DashboardPeriodDataParams {
 	monthlyData: MonthlyDashboardData
 	selectedPeriod: DashboardPeriod
+	viewDate: Date
 	weeklyData: WeeklyDashboardData
 	yearlyData: YearlyDashboardData
 }
@@ -34,18 +35,16 @@ export interface DashboardPeriodData {
 	totalLabel: string
 }
 
-const getDaysInCurrentMonth = () => {
-	const today = new Date()
-
-	return new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate()
+const getDaysInMonth = (date: Date) => {
+	return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()
 }
 
-const getDaysInCurrentYear = () => {
-	const currentYear = new Date().getFullYear()
+const getDaysInYear = (date: Date) => {
+	const year = date.getFullYear()
 
 	return (
-		(new Date(currentYear + 1, 0, 1).getTime() -
-			new Date(currentYear, 0, 1).getTime()) /
+		(new Date(year + 1, 0, 1).getTime() -
+			new Date(year, 0, 1).getTime()) /
 		(1000 * 60 * 60 * 24)
 	)
 }
@@ -53,6 +52,7 @@ const getDaysInCurrentYear = () => {
 export const getDashboardPeriodData = ({
 	monthlyData,
 	selectedPeriod,
+	viewDate,
 	weeklyData,
 	yearlyData,
 }: DashboardPeriodDataParams): DashboardPeriodData => {
@@ -83,7 +83,7 @@ export const getDashboardPeriodData = ({
 			chartData: monthlyData.rangeTotals,
 			chartTitle: "Spending this Month",
 			dailyAverage: monthlyData.dailyAverage,
-			dailyAverageDetail: `${getDaysInCurrentMonth()} days in month`,
+			dailyAverageDetail: `${getDaysInMonth(viewDate)} days in month`,
 			expenseCount: monthlyData.monthlyExpenses.length,
 			periodLabel: "this month",
 			topCategory: monthlyData.topCategory,
@@ -98,7 +98,7 @@ export const getDashboardPeriodData = ({
 			chartData: yearlyData.monthlyTotals,
 			chartTitle: "Spending this Year",
 			dailyAverage: yearlyData.dailyAverage,
-			dailyAverageDetail: `${getDaysInCurrentYear()} days in year`,
+			dailyAverageDetail: `${getDaysInYear(viewDate)} days in year`,
 			expenseCount: yearlyData.yearlyExpenses.length,
 			periodLabel: "this year",
 			topCategory: yearlyData.topCategory,
