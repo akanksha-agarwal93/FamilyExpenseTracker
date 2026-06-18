@@ -40,17 +40,12 @@ export const DashboardHeader = ({
 						<button
 							key={period}
 							type='button'
-							disabled={period === "Yearly"}
-							onClick={() => {
-								if (period !== "Yearly") onPeriodChange(period)
-							}}
+							onClick={() => onPeriodChange(period)}
 							className={[
 								"h-9 rounded-md px-4 text-sm font-bold transition",
 								period === selectedPeriod
 									? "bg-[#30312e] text-[#f3f1eb]"
-									: period === "Yearly"
-										? "cursor-not-allowed text-[#c8c4bc] opacity-50"
-										: "text-[#c8c4bc] hover:bg-[#2b2c29] hover:text-[#f3f1eb]",
+									: "text-[#c8c4bc] hover:bg-[#2b2c29] hover:text-[#f3f1eb]",
 							].join(" ")}
 						>
 							{period}

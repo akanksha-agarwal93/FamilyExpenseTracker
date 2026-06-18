@@ -48,7 +48,6 @@ export const getExpenseDate = (expense: Expense) => new Date(expense.date)
 
 const normalizeCategory = (category: string): ExpenseCategory => {
 	const normalizedCategory = category.trim().toLowerCase()
-	console.log("Normalized category:", normalizedCategory)
 	const matchingCategory = expenseCategories.find(
 		(expenseCategory) =>
 			expenseCategory.value.toLowerCase() === normalizedCategory,

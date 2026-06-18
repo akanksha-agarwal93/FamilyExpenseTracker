@@ -12,7 +12,12 @@ export function SpendingChart({ data, title }: SpendingChartProps) {
 	const maxTotal = Math.max(...data.map((item) => item.total), 90)
 	const maxTick = Math.max(90, Math.ceil(maxTotal / 10) * 10)
 	const ticks = chartTicks.map((tick) => Math.round((tick / 90) * maxTick))
-	const columnClass = data.length === 5 ? "grid-cols-5" : "grid-cols-7"
+	const columnClass =
+		data.length === 12
+			? "grid-cols-12 gap-1.5 sm:gap-3"
+			: data.length === 5
+				? "grid-cols-5 gap-3"
+				: "grid-cols-7 gap-3"
 
 	return (
 		<section className='rounded-xl border border-[#575852] bg-[#30312e] px-5 py-5 text-left'>
@@ -43,7 +48,7 @@ export function SpendingChart({ data, title }: SpendingChartProps) {
 					</div>
 
 					<div
-						className={`relative z-10 grid h-full items-end gap-3 pb-7 ${columnClass}`}
+						className={`relative z-10 grid h-full items-end pb-7 ${columnClass}`}
 					>
 						{data.map((item) => {
 							const height = maxTick > 0 ? (item.total / maxTick) * 100 : 0

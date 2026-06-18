@@ -1,6 +1,6 @@
 import type { ExpenseCategory } from "./ExpenseCategory"
 
-export type DashboardPeriod = "Weekly" | "Monthly"
+export type DashboardPeriod = "Weekly" | "Monthly" | "Yearly"
 
 export interface DashboardChartItem {
 	label: string
