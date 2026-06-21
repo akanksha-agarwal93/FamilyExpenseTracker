@@ -42,9 +42,18 @@ Routing:
 - Shared form component for Add/Edit flows
 - TypeScript interfaces for type safety
 
+## V2 Features
+
+- Dashboard with weekly, monthly, and yearly analytics
+- Period navigation for previous and next time ranges
+- Budget tracking and daily average calculation
+- Top spending category summary
+- Category breakdown donut chart
+- Spending trend chart
+- Custom hooks for dashboard data aggregation
+
 ## Future Improvements
 
-- Dashboard with monthly expense analytics
 - Expense category breakdown charts
 - Cloud persistence using Supabase
 - Authentication and multi-user support
@@ -75,3 +84,17 @@ Routing:
 ### Category Filter
 
 ![Category Filter](./Screenshots/v1/CategoryFilter.png)
+
+## V2
+
+### Weekly Dashboard
+
+![Weekly Dashboard](./Screenshots/v2/WeeklyDashboard.png)
+
+### Monthly Dashboard
+
+![Monthly Dashboard](./Screenshots/v2/MonthlyDashboard.png)
+
+### Yearly Dashboard
+
+![Yearly Dashboard](./Screenshots/v2/YearlyDashboard.png)
