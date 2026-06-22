@@ -1,21 +1,14 @@
 import { useMemo, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { FiCheck, FiLogOut, FiMail, FiShield, FiUser } from "react-icons/fi"
-import {
-	clearAuthSession,
-	getStoredAuthSession,
-	saveAuthSession,
-	type AuthSession,
-} from "../utils/AuthSession"
-import { getUserId, saveUser } from "../utils/UserTable"
-import type { User } from "../types/User"
+import { useAuth } from "../context/AuthContextState"
 
 const inputClass =
 	"h-11 w-full rounded-md border border-[#53534f] bg-[#2e2f2d] px-11 text-base font-semibold text-[#f2efe8] outline-none transition placeholder:text-[#7e7d79] focus:border-[#85827b] focus:ring-2 focus:ring-[#85827b]/20"
 
 export function Auth() {
 	const navigate = useNavigate()
-	const [session, setSession] = useState<AuthSession | null>(getStoredAuthSession)
+	const { session, signIn, signOut } = useAuth()
 	const [name, setName] = useState(session?.name || "")
 	const [email, setEmail] = useState(session?.email || "")
 
@@ -27,26 +20,12 @@ export function Auth() {
 	const handleSubmit = () => {
 		if (!canSubmit) return
 
-		const normalizedEmail = email.trim()
-		const user: User = {
-			id: getUserId(normalizedEmail),
-			email: normalizedEmail,
-			name: name.trim(),
-		}
-		const nextSession: AuthSession = {
-			...user,
-			signedInAt: new Date().toISOString(),
-		}
-
-		saveUser(user)
-		saveAuthSession(nextSession)
-		setSession(nextSession)
+		signIn(name, email)
 		navigate("/dashboard")
 	}
 
 	const handleSignOut = () => {
-		clearAuthSession()
-		setSession(null)
+		signOut()
 		setName("")
 		setEmail("")
 	}

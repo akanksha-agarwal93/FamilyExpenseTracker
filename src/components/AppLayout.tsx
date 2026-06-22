@@ -1,6 +1,6 @@
 import { NavLink, Outlet, useNavigate } from "react-router-dom"
 import { FiHome, FiList, FiLogOut, FiPlusCircle } from "react-icons/fi"
-import { clearAuthSession } from "../utils/AuthSession"
+import { useAuth } from "../context/AuthContextState"
 
 const navLinkClass = ({ isActive }: { isActive: boolean }) =>
 	[
@@ -12,9 +12,10 @@ const navLinkClass = ({ isActive }: { isActive: boolean }) =>
 
 export function AppLayout() {
 	const navigate = useNavigate()
+	const { signOut } = useAuth()
 
 	const handleSignOut = () => {
-		clearAuthSession()
+		signOut()
 		navigate("/")
 	}
 

@@ -5,7 +5,7 @@ import {
 	expenseCategories,
 	type ExpenseCategory,
 } from "../types/ExpenseCategory"
-import { getStoredAuthSession } from "../utils/AuthSession"
+import { useAuth } from "../context/AuthContextState"
 import { getDateInputValue } from "../utils/Formatters"
 
 interface ExpenseFormProps {
@@ -18,8 +18,9 @@ export function ExpenseForm({
 	handleSubmit,
 }: ExpenseFormProps) {
 	const navigate = useNavigate()
+	const { session } = useAuth()
 	const expenseId = initialExpense?.id || crypto.randomUUID()
-	const userId = initialExpense?.userId || getStoredAuthSession()?.id || ""
+	const userId = initialExpense?.userId || session?.id || ""
 	const [expenseName, setExpenseName] = useState(initialExpense?.name || "")
 	const [expenseCategory, setExpenseCategory] = useState(
 		initialExpense?.category || expenseCategories[0].value,

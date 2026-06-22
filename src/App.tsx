@@ -4,13 +4,16 @@ import { AppLayout } from "./components/AppLayout"
 import { Auth } from "./components/Auth"
 import Dashboard from "./components/Dashboard"
 import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom"
+import { AuthProvider } from "./context/AuthContext"
+import { useAuth } from "./context/AuthContextState"
 import { ExpenseProvider } from "./context/ExpenseContext"
 import Expenses from "./components/Expenses"
 import { EditExpense } from "./components/EditExpense"
-import { hasAuthSession } from "./utils/AuthSession"
 
 function ProtectedAppLayout() {
-	if (!hasAuthSession()) {
+	const { isAuthenticated } = useAuth()
+
+	if (!isAuthenticated) {
 		return <Navigate to='/' replace />
 	}
 
@@ -53,7 +56,9 @@ function App() {
 	])
 	return (
 		<>
-			<RouterProvider router={router} />
+			<AuthProvider>
+				<RouterProvider router={router} />
+			</AuthProvider>
 		</>
 	)
 }

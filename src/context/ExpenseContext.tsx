@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactNode } from "react"
 import type { Expense } from "../types/Expense"
-import { getStoredAuthSession } from "../utils/AuthSession"
+import { useAuth } from "./AuthContextState"
 import { ExpenseContext } from "./ExpenseContextState"
 
 interface ExpenseProviderProps {
@@ -8,6 +8,7 @@ interface ExpenseProviderProps {
 }
 
 export const ExpenseProvider = ({ children }: ExpenseProviderProps) => {
+	const { session } = useAuth()
 	const [allExpenses, setAllExpenses] = useState<Expense[]>(() => {
 		try {
 			const saved = localStorage.getItem("expenses")
@@ -17,7 +18,7 @@ export const ExpenseProvider = ({ children }: ExpenseProviderProps) => {
 			return []
 		}
 	})
-	const currentUserId = getStoredAuthSession()?.id || ""
+	const currentUserId = session?.id || ""
 	const expenses = allExpenses.filter(
 		(expense) => expense.userId === currentUserId,
 	)
