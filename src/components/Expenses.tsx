@@ -7,6 +7,7 @@ import {
 	CategoryFilterDropdown,
 	type CategoryFilter,
 } from "../shared/CategoryFilterDropdown"
+import { Button } from "../shared/Button"
 import { getExpenseIcon } from "../utils/ExpenseCategoryIcon"
 import {
 	currencyFormatter,
@@ -73,13 +74,13 @@ export default function Expenses() {
 					<h1 className='m-0 text-2xl font-bold tracking-normal text-[#f3f1eb]'>
 						Expenses
 					</h1>
-					<button
+					<Button
+						type='button'
 						onClick={() => navigate("/add-expense")}
-						className='inline-flex h-[45px] items-center gap-2 rounded-lg bg-[#3f3f3b] px-5 text-base font-bold text-[#f3f1eb] transition hover:bg-[#4b4b46] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#b5b0a7]'
 					>
 						<FiPlus className='text-lg' />
 						Add new
-					</button>
+					</Button>
 				</header>
 
 				<CategoryFilterDropdown
@@ -158,20 +159,24 @@ export default function Expenses() {
 										</p>
 
 										<div className='col-span-3 flex justify-end gap-1.5 sm:col-span-1'>
-											<button
+											<Button
+												type='button'
+												variant='icon'
+												size='icon'
 												aria-label={`Edit ${expense.name || "expense"}`}
 												onClick={() => navigate("/edit-expense/" + expense.id)}
-												className='flex h-10 w-10 items-center justify-center rounded-lg border border-[#66645e] bg-[#30312e] text-[#d2cec6] transition hover:border-[#817d75] hover:bg-[#383934] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#b5b0a7]'
 											>
 												<FiEdit2 />
-											</button>
-											<button
+											</Button>
+											<Button
+												type='button'
+												variant='icon'
+												size='icon'
 												aria-label={`Delete ${expense.name || "expense"}`}
 												onClick={() => deleteExpense(expense.id)}
-												className='flex h-10 w-10 items-center justify-center rounded-lg border border-[#66645e] bg-[#30312e] text-[#d2cec6] transition hover:border-[#817d75] hover:bg-[#383934] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#b5b0a7]'
 											>
 												<FiTrash2 />
-											</button>
+											</Button>
 										</div>
 									</div>
 								))}

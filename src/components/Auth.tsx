@@ -2,9 +2,9 @@ import { useMemo, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { FiCheck, FiLogOut, FiMail, FiShield, FiUser } from "react-icons/fi"
 import { useAuth } from "../context/AuthContextState"
-
-const inputClass =
-	"h-11 w-full rounded-md border border-[#53534f] bg-[#2e2f2d] px-11 text-base font-semibold text-[#f2efe8] outline-none transition placeholder:text-[#7e7d79] focus:border-[#85827b] focus:ring-2 focus:ring-[#85827b]/20"
+import { Button } from "../shared/Button"
+import { Card, CardBody, CardHeader } from "../shared/Card"
+import { Input } from "../shared/Input"
 
 export function Auth() {
 	const navigate = useNavigate()
@@ -67,8 +67,8 @@ export function Auth() {
 					</div>
 				</section>
 
-				<section className='rounded-xl border border-[#4a4a46] bg-[#2f302e] shadow-[0_22px_60px_rgba(0,0,0,0.24)]'>
-					<div className='border-b border-[#444541] bg-[#222320] px-7 py-6 sm:px-8'>
+				<Card>
+					<CardHeader>
 						<h2 className='text-2xl font-bold leading-tight tracking-normal text-[#f3f1eb]'>
 							{session ? "You are signed in" : "Sign in"}
 						</h2>
@@ -77,10 +77,10 @@ export function Auth() {
 								? `User id: ${session.id}`
 								: "Enter your name and email to start your session."}
 						</p>
-					</div>
+					</CardHeader>
 
 					{session ? (
-						<div className='space-y-5 px-7 py-7 sm:px-8'>
+						<CardBody>
 							<div className='rounded-lg border border-[#484944] bg-[#292a27] p-5'>
 								<div className='flex items-start gap-4'>
 									<span className='flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-[#f4f1e9] text-xl text-[#242520]'>
@@ -98,83 +98,69 @@ export function Auth() {
 							</div>
 
 							<div className='grid gap-3 sm:grid-cols-2'>
-								<button
+								<Button
 									type='button'
 									onClick={() => navigate("/dashboard")}
-									className='h-12 rounded-md border border-[#484844] bg-[#4a4a46] px-5 text-base font-bold text-[#f3f1eb] transition hover:bg-[#585751] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#b5b0a7]'
+									size='lg'
 								>
 									Go to dashboard
-								</button>
-								<button
+								</Button>
+								<Button
 									type='button'
 									onClick={handleSignOut}
-									className='inline-flex h-12 items-center justify-center gap-2 rounded-md border border-[#5d5d59] bg-[#292a27] px-5 text-base font-bold text-[#cfcbc3] transition hover:border-[#77746d] hover:bg-[#30312e] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#b5b0a7]'
+									variant='secondary'
+									size='lg'
 								>
 									<FiLogOut />
 									Sign out
-								</button>
+								</Button>
 							</div>
-						</div>
+						</CardBody>
 					) : (
-						<form
-							onSubmit={(event) => {
-								event.preventDefault()
-								handleSubmit()
-							}}
-							className='space-y-5 px-7 py-7 sm:px-8'
-						>
-							<div>
-								<label
-									htmlFor='auth-name'
-									className='mb-2 block text-base font-semibold text-[#c5c2bb]'
-								>
-									Name
-								</label>
-								<div className='relative'>
-									<FiUser className='pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#9d9990]' />
-									<input
-										id='auth-name'
-										type='text'
-										placeholder='Name'
-										className={inputClass}
-										value={name}
-										onChange={(event) => setName(event.target.value)}
-										required
-									/>
-								</div>
-							</div>
-
-							<div>
-								<label
-									htmlFor='auth-email'
-									className='mb-2 block text-base font-semibold text-[#c5c2bb]'
-								>
-									Email address
-								</label>
-								<div className='relative'>
-									<FiMail className='pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#9d9990]' />
-									<input
-										id='auth-email'
-										type='email'
-										placeholder='Email address'
-										className={inputClass}
-										value={email}
-										onChange={(event) => setEmail(event.target.value)}
-										required
-									/>
-								</div>
-							</div>
-
-							<button
-								type='submit'
-								disabled={!canSubmit}
-								className='flex h-12 w-full items-center justify-center rounded-md border border-[#484844] bg-[#4a4a46] px-5 text-base font-bold text-[#f3f1eb] transition hover:bg-[#585751] disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:bg-[#4a4a46] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#b5b0a7]'
+						<CardBody>
+							<form
+								onSubmit={(event) => {
+									event.preventDefault()
+									handleSubmit()
+								}}
+								className='space-y-5'
 							>
-								Sign in
-							</button>
-						</form>
+								<Input
+									id='auth-name'
+									type='text'
+									label='Name'
+									placeholder='Name'
+									inputSize='lg'
+									leftIcon={<FiUser />}
+									value={name}
+									onChange={(event) => setName(event.target.value)}
+									required
+								/>
+
+								<Input
+									id='auth-email'
+									type='email'
+									label='Email address'
+									placeholder='Email address'
+									inputSize='lg'
+									leftIcon={<FiMail />}
+									value={email}
+									onChange={(event) => setEmail(event.target.value)}
+									required
+								/>
+
+								<Button
+									type='submit'
+									disabled={!canSubmit}
+									fullWidth
+									size='lg'
+								>
+									Sign in
+								</Button>
+							</form>
+						</CardBody>
 					)}
-				</section>
+				</Card>
 			</div>
 		</div>
 	)

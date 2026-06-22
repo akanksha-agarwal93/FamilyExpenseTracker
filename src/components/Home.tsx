@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom"
+import { Button } from "../shared/Button"
 
 export default function Home() {
 	const navigate = useNavigate()
@@ -12,22 +13,24 @@ export default function Home() {
 					Track spending, review totals, and keep the household budget visible.
 				</p>
 				<div className='mx-auto mt-7 grid max-w-[396px] gap-3 sm:grid-cols-2'>
-				<button
-					className='h-[45px] rounded-lg bg-[#f4f1e9] px-5 text-base font-bold text-[#242520] transition hover:bg-[#dedacf] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#b5b0a7]'
-					onClick={() => {
-						navigate("/add-expense")
-					}}
-				>
-					Add Expense
-				</button>
-				<button
-					className='h-[45px] rounded-lg border border-[#5d5d59] bg-[#292a27] px-5 text-base font-bold text-[#cfcbc3] transition hover:border-[#77746d] hover:bg-[#30312e] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#b5b0a7]'
-					onClick={() => {
-						navigate("/expenses")
-					}}
-				>
-					View Expenses
-				</button>
+					<Button
+						type='button'
+						variant='accent'
+						onClick={() => {
+							navigate("/add-expense")
+						}}
+					>
+						Add Expense
+					</Button>
+					<Button
+						type='button'
+						variant='secondary'
+						onClick={() => {
+							navigate("/expenses")
+						}}
+					>
+						View Expenses
+					</Button>
 				</div>
 			</div>
 		</div>

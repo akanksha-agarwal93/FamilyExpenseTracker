@@ -1,6 +1,7 @@
 import { NavLink, Outlet, useNavigate } from "react-router-dom"
 import { FiHome, FiList, FiLogOut, FiPlusCircle } from "react-icons/fi"
 import { useAuth } from "../context/AuthContextState"
+import { Button } from "../shared/Button"
 
 const navLinkClass = ({ isActive }: { isActive: boolean }) =>
 	[
@@ -46,14 +47,15 @@ export function AppLayout() {
 							<FiPlusCircle />
 							Add
 						</NavLink>
-						<button
+						<Button
 							type='button'
 							onClick={handleSignOut}
-							className='inline-flex h-10 items-center gap-2 rounded-lg px-3 text-sm font-bold text-[#c9c5bd] transition hover:bg-[#333430] hover:text-[#f3f1eb]'
+							variant='ghost'
+							size='sm'
 						>
 							<FiLogOut />
 							Sign out
-						</button>
+						</Button>
 					</div>
 				</div>
 			</nav>

@@ -1,6 +1,7 @@
 import { FiChevronLeft, FiChevronRight, FiPlus } from "react-icons/fi"
 import { useNavigate } from "react-router-dom"
 import type { DashboardPeriod } from "../../types/Dashboard"
+import { Button } from "../../shared/Button"
 
 const periods = ["Weekly", "Monthly", "Yearly"] as const
 
@@ -28,14 +29,16 @@ export const DashboardHeader = ({
 					<h1 className='m-0 text-2xl font-bold tracking-normal text-[#f3f1eb]'>
 						Dashboard
 					</h1>
-					<button
+					<Button
 						type='button'
+						variant='accent'
+						size='icon'
 						aria-label='Add expense'
 						onClick={() => navigate("/add-expense")}
-						className='flex h-10 w-10 items-center justify-center rounded-lg bg-[#f4f1e9] text-lg text-[#242520] transition hover:bg-[#dedacf] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#b5b0a7] sm:hidden'
+						className='text-lg sm:hidden'
 					>
 						<FiPlus />
-					</button>
+					</Button>
 				</div>
 
 				<div className='flex items-center justify-between gap-3'>
@@ -44,46 +47,52 @@ export const DashboardHeader = ({
 						aria-label='Dashboard period'
 					>
 						{periods.map((period) => (
-							<button
+							<Button
 								key={period}
 								type='button'
+								variant='ghost'
+								size='sm'
 								onClick={() => onPeriodChange(period)}
 								className={[
-									"h-9 rounded-md px-4 text-sm font-bold transition",
+									"h-9 rounded-md border-transparent px-4",
 									period === selectedPeriod
 										? "bg-[#30312e] text-[#f3f1eb]"
 										: "text-[#c8c4bc] hover:bg-[#2b2c29] hover:text-[#f3f1eb]",
 								].join(" ")}
 							>
 								{period}
-							</button>
+							</Button>
 						))}
 					</div>
 				</div>
 			</div>
 
 			<div className='mt-6 flex items-center justify-center gap-8 sm:gap-12'>
-				<button
+				<Button
 					type='button'
+					variant='secondary'
+					size='icon'
 					aria-label='Previous period'
 					onClick={onPreviousPeriod}
-					className='flex h-11 w-11 items-center justify-center rounded-lg border border-[#5d5d59] bg-[#242522] text-xl text-[#f3f1eb] transition hover:bg-[#30312e] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#b5b0a7]'
+					className='h-11 w-11 bg-[#242522] text-xl text-[#f3f1eb]'
 				>
 					<FiChevronLeft />
-				</button>
+				</Button>
 
 				<p className='min-w-[140px] text-center text-lg font-black text-[#f3f1eb]'>
 					{rangeLabel}
 				</p>
 
-				<button
+				<Button
 					type='button'
+					variant='secondary'
+					size='icon'
 					aria-label='Next period'
 					onClick={onNextPeriod}
-					className='flex h-11 w-11 items-center justify-center rounded-lg border border-[#5d5d59] bg-[#242522] text-xl text-[#f3f1eb] transition hover:bg-[#30312e] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#b5b0a7]'
+					className='h-11 w-11 bg-[#242522] text-xl text-[#f3f1eb]'
 				>
 					<FiChevronRight />
-				</button>
+				</Button>
 			</div>
 		</header>
 	)
