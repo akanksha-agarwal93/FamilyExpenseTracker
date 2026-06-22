@@ -1,5 +1,6 @@
 import { useEffect, useState, type ReactNode } from "react"
 import type { Expense } from "../types/Expense"
+import { getStoredAuthSession } from "../utils/AuthSession"
 import { ExpenseContext } from "./ExpenseContextState"
 
 interface ExpenseProviderProps {
@@ -7,7 +8,7 @@ interface ExpenseProviderProps {
 }
 
 export const ExpenseProvider = ({ children }: ExpenseProviderProps) => {
-	const [expenses, setExpenses] = useState<Expense[]>(() => {
+	const [allExpenses, setAllExpenses] = useState<Expense[]>(() => {
 		try {
 			const saved = localStorage.getItem("expenses")
 			return saved ? JSON.parse(saved) : []
@@ -16,18 +17,22 @@ export const ExpenseProvider = ({ children }: ExpenseProviderProps) => {
 			return []
 		}
 	})
+	const currentUserId = getStoredAuthSession()?.id || ""
+	const expenses = allExpenses.filter(
+		(expense) => expense.userId === currentUserId,
+	)
 
 	useEffect(() => {
-		localStorage.setItem("expenses", JSON.stringify(expenses))
-	}, [expenses])
+		localStorage.setItem("expenses", JSON.stringify(allExpenses))
+	}, [allExpenses])
 
 	const addExpense = (expense: Expense) => {
-		setExpenses((prev) => [...prev, expense])
+		setAllExpenses((prev) => [...prev, expense])
 	}
 
 	const editExpense = (updatedExpense: Expense) => {
 		const expenseId = updatedExpense.id
-		setExpenses((prev) =>
+		setAllExpenses((prev) =>
 			prev.map((expense) =>
 				expense.id === expenseId ? updatedExpense : expense,
 			),
@@ -35,7 +40,7 @@ export const ExpenseProvider = ({ children }: ExpenseProviderProps) => {
 	}
 
 	const deleteExpense = (id: string) => {
-		setExpenses((prev) => prev.filter((expense) => expense.id !== id))
+		setAllExpenses((prev) => prev.filter((expense) => expense.id !== id))
 	}
 
 	return (
